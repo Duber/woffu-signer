@@ -24,7 +24,7 @@
   "variables": {
     "storageName": "woffusigner",
     "appfunName": "woffu-signer-azfun",
-    "aiName": "woffu-signer-azfun"
+    "aiName": "woffu-signer-appi"
   },
   "resources": [
     {
