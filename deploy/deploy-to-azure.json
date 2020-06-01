@@ -1,0 +1,130 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "WOFFU_URL": {
+      "type": "string",
+      "defaultValue": "https://app.woffu.com"
+    },
+    "WOFFU_USERNAME": {
+      "type": "string"
+    },
+    "WOFFU_PASSWORD": {
+      "type": "string"
+    },
+    "SignInSchedule": {
+      "type": "string",
+      "defaultValue": "0 0 9 * * *"
+    },
+    "SignOutSchedule": {
+      "type": "string",
+      "defaultValue": "0 0 18 * * *"
+    }
+  },
+  "variables": {
+    "storageName": "woffusigner",
+    "appfunName": "woffu-signer-azfun",
+    "aiName": "woffu-signer-azfun"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2018-07-01",
+      "name": "[variables('storageName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2"
+    },
+    {
+      "apiVersion": "2015-05-01",
+      "name": "[variables('aiName')]",
+      "type": "Microsoft.Insights/components",
+      "kind": "web",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('appfunName'))]": "Resource"
+      },
+      "properties": {
+        "Application_Type": "web",
+        "ApplicationId": "[variables('aiName')]"
+      }
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "type": "Microsoft.Web/sites",
+      "name": "[variables('appfunName')]",
+      "location": "[resourceGroup().location]",
+      "kind": "functionapp,linux",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]",
+        "[resourceId('Microsoft.Insights/components', variables('aiName'))]"
+      ],
+      "properties": {
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "AzureWebJobsDashboard",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageName'), ';AccountKey=', listKeys(variables('storageName'),'2015-05-01-preview').key1)]"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageName'), ';AccountKey=', listKeys(variables('storageName'),'2015-05-01-preview').key1)]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~2"
+            },
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "node"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('microsoft.insights/components/', variables('aiName')), '2015-05-01').InstrumentationKey]"
+            },
+            {
+              "name": "WOFFU_URL",
+              "value": "[parameters('WOFFU_URL')]"
+            },
+            {
+              "name": "WOFFU_USERNAME",
+              "value": "[parameters('WOFFU_USERNAME')]"
+            },
+            {
+              "name": "WOFFU_PASSWORD",
+              "value": "[parameters('WOFFU_PASSWORD')]"
+            },
+            {
+              "name": "SignInSchedule",
+              "value": "[parameters('SignInSchedule')]"
+            },
+            {
+              "name": "SignOutSchedule",
+              "value": "[parameters('SignOutSchedule')]"
+            }
+          ]
+        },
+        "reserved": true
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-08-01",
+          "name": "web",
+          "type": "sourcecontrols",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites/', variables('appfunName'))]"
+          ],
+          "properties": {
+            "RepoUrl": "https://github.com/Duber/woffu-signer.git",
+            "branch": "master",
+            "publishRunbook": true,
+            "IsManualIntegration": true
+          }
+        }
+      ]
+    }
+  ],
+  "outputs": {}
+}
