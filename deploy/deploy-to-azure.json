@@ -63,6 +63,7 @@
       ],
       "properties": {
         "siteConfig": {
+          "alwaysOn": true,
           "appSettings": [
             {
               "name": "AzureWebJobsDashboard",
@@ -110,17 +111,16 @@
       },
       "resources": [
         {
-          "apiVersion": "2015-08-01",
+          "apiVersion": "2019-08-01",
           "name": "web",
           "type": "sourcecontrols",
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites/', variables('appfunName'))]"
           ],
           "properties": {
-            "RepoUrl": "https://github.com/Duber/woffu-signer.git",
+            "repoUrl": "https://github.com/Duber/woffu-signer.git",
             "branch": "master",
-            "publishRunbook": true,
-            "IsManualIntegration": true
+            "isManualIntegration": false
           }
         }
       ]
