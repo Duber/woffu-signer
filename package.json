@@ -1,22 +1,24 @@
 {
-  "name": "woffu-signer",
-  "version": "1.0.0",
-  "description": "",
-  "author": "Miguel Cruz",
-  "license": "ISC",
-  "main": "src/app.ts",
+  "name": "",
+  "version": "",
   "scripts": {
-    "start": "tsc && node -r dotenv/config dist/app.js",
-    "debug": "tsc && node -r dotenv/config --nolazy --inspect-brk=9229 dist/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "build:production": "npm run prestart && npm prune --production",
+    "watch": "tsc --w",
+    "prestart": "npm run build && func extensions install",
+    "start:host": "func start",
+    "start": "npm-run-all --parallel start:host watch",
+    "test": "echo \"No tests yet...\""
+  },
+  "description": "",
+  "devDependencies": {
+    "@azure/functions": "^1.0.1-beta1",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^3.3.3"
   },
   "dependencies": {
-    "@types/node": "^14.0.5",
+    "@types/node": "^14.0.6",
     "axios": "^0.19.2",
-    "dotenv": "^8.2.0",
-    "typescript": "^3.9.3"
-  },
-  "devDependencies": {
-    "tslint": "^5.12.1"
+    "jsonwebtoken": "^8.5.1"
   }
 }
