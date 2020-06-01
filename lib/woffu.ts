@@ -1,5 +1,5 @@
 import axios from 'axios';
-import jwt from 'jsonwebtoken'
+import * as jwt from 'jsonwebtoken'
 
 const ONE_MINUTE_MILLISECONDS = 60000
 const URL = process.env.WOFFU_URL
@@ -11,7 +11,7 @@ class Woffu {
             "TimezoneOffset": new Date().getTimezoneOffset(),
             "UserId": this.getUserIdFromToken(token)
         }
-        if (!this.isCurrentlySigned(token)) {
+        if (!await this.isCurrentlySigned(token)) {
             console.log(`Skipping signout because user ${this.getUsernameFromToken(token)} is not signed.`)
             return
         }
@@ -25,12 +25,12 @@ class Woffu {
             "TimezoneOffset": new Date().getTimezoneOffset(),
             "UserId": this.getUserIdFromToken(token)
         }
-        if (this.isCurrentlySigned(token)) {
+        if (await this.isCurrentlySigned(token)) {
             console.log(`Skipping signin for user ${this.getUsernameFromToken(token)} because is already signed.`)
             return
         }
 
-        if (this.isHoliday(token)) {
+        if (await this.isHoliday(token)) {
             console.log(`Skipping signin for user ${this.getUsernameFromToken(token)} because today is weekend or holiday.`)
             return
          }
