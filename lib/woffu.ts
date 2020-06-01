@@ -1,6 +1,7 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken'
 
+const ONE_MINUTE_MILLISECONDS = 60000
 const URL = process.env.WOFFU_URL
 let tokens = {}
 
@@ -13,9 +14,15 @@ class Woffu {
     }
     async login(username: string, password: string){
         try {
+            if (tokens.hasOwnProperty(username)){
+                let token = tokens[username]
+                if ((Date.now() - jwt.decode(token).exp) > ONE_MINUTE_MILLISECONDS)
+                    return token
+            }
             let loginResponse = await axios.post(`${URL}/token`, `grant_type=password&username=${username}&password=${password}`);
-            tokens[username] = loginResponse.data.access_token
-            return tokens[username];
+            let token = loginResponse.data.access_token
+            tokens[username] = token
+            return token;
         }
         catch (e) {
             let errorMessage = `${e.message}: ${e.response.data.error}`;
