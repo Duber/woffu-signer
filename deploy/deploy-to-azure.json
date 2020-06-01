@@ -77,7 +77,8 @@
       "kind": "functionapp,linux",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]",
-        "[resourceId('Microsoft.Insights/components', variables('aiName'))]"
+        "[resourceId('Microsoft.Insights/components', variables('aiName'))]",
+        "[resourceId('Microsoft.Web/serverfarms', variables('spName'))]"
       ],
       "properties": {
         "serverFarmId": "[variables('spName')]",
