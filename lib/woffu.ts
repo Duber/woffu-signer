@@ -1,7 +1,6 @@
 import axios from 'axios';
 import * as jwt from 'jsonwebtoken'
 
-const ONE_MINUTE_MILLISECONDS = 60000
 const URL = process.env.WOFFU_URL
 let tokens = {}
 
@@ -33,7 +32,7 @@ class Woffu {
         if (await this.isHoliday(token)) {
             console.log(`Skipping signin for user ${this.getUsernameFromToken(token)} because today is weekend or holiday.`)
             return
-         }
+        }
 
         let response = await axios.post(`${URL}/api/signs`, data, this.buildAxiosOptionsWithToken(token))
         if (response.status != 201) {
@@ -78,7 +77,12 @@ class Woffu {
     }
 
     private isValidToken(token: string) {
-        return (Date.now() - jwt.decode(token).exp) > ONE_MINUTE_MILLISECONDS;
+        try {
+            jwt.verify(token)
+            return true
+        } catch {
+            return false
+        }
     }
 
     private getUserIdFromToken(token: string) {
