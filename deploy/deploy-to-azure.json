@@ -74,7 +74,7 @@
             },
             {
               "name": "FUNCTIONS_EXTENSION_VERSION",
-              "value": "~2"
+              "value": "~3"
             },
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
@@ -106,6 +106,7 @@
             }
           ]
         },
+        "linuxFxVersion": "Node|12",
         "reserved": true
       },
       "resources": [
@@ -119,7 +120,7 @@
           "properties": {
             "repoUrl": "https://github.com/Duber/woffu-signer.git",
             "branch": "master",
-            "isManualIntegration": false
+            "isManualIntegration": true
           }
         }
       ]
