@@ -23,6 +23,7 @@
   },
   "variables": {
     "storageName": "woffusigner",
+    "spName": "woffu-signer-sp",
     "appfunName": "woffu-signer-azfun",
     "aiName": "woffu-signer-appi"
   },
@@ -37,6 +38,23 @@
       },
       "kind": "StorageV2"
     },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2016-09-01",
+      "name": "[variables('spName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "name": "[variables('spName')]",
+        "computeMode": "Dynamic"
+      },
+      "sku": {
+        "name": "Y1",
+        "tier": "Dynamic",
+        "size": "Y1",
+        "family": "Y",
+        "capacity": 0
+      }
+    }
     {
       "apiVersion": "2015-05-01",
       "name": "[variables('aiName')]",
@@ -62,6 +80,7 @@
         "[resourceId('Microsoft.Insights/components', variables('aiName'))]"
       ],
       "properties": {
+        "serverFarmId": "[variables('spName')]",
         "siteConfig": {
           "appSettings": [
             {
@@ -103,6 +122,22 @@
             {
               "name": "SignOutSchedule",
               "value": "[parameters('SignOutSchedule')]"
+            },
+            {
+              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageName'), ';AccountKey=', listKeys(variables('storageName'),'2015-05-01-preview').key1)]"
+            },
+            {
+              "name": "WEBSITE_CONTENTSHARE",
+              "value": "[toLower(variables('appfunName'))]"
+            },
+            {
+              "name": "WEBSITE_NODE_DEFAULT_VERSION",
+              "value": "12.17.0"
+            },
+            {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "1"
             }
           ]
         },
