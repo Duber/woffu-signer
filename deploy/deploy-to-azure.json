@@ -32,7 +32,7 @@
     "WEBSITE_TIME_ZONE": {
       "type": "string",
       "metadata": {
-        "description": "Timezone. Taken into account together with schedule expressions in order to fire signin/signout. See https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-vista/cc749073(v=ws.10)?redirectedfrom=MSDN."
+        "description": "Timezone. Taken into account together with schedule expressions in order to fire signin/signout. See https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-vista/cc749073(v=ws.10)."
       },
       "defaultValue": "Romance Standard Time"
     },
