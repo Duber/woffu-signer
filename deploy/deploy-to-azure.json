@@ -44,22 +44,22 @@
     "storageName": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "[concat(' woffusigner',uniqueString(newGuid()))]"
+      "defaultValue": "[concat('woffusigner',uniqueString(newGuid()))]"
     },
     "spName": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "[concat('woffu-signer-sp-',uniqueString(newGuid())]"
+      "defaultValue": "[concat('woffu-signer-sp-',uniqueString(newGuid()))]"
     },
     "appfunName": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "[concat('woffu-signer-azfun-',uniqueString(newGuid())]"
+      "defaultValue": "[concat('woffu-signer-azfun-',uniqueString(newGuid()))]"
     },
     "applicationInsightsName": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "[concat('woffu-signer-appi-',uniqueString(newGuid())]"
+      "defaultValue": "[concat('woffu-signer-appi-',uniqueString(newGuid()))]"
     }
   },
   "resources": [
