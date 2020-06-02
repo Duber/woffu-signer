@@ -19,18 +19,25 @@
     "SignOutSchedule": {
       "type": "string",
       "defaultValue": "0 0 18 * * *"
+    },
+    "storageName": {
+      "type": "string",
+      "defaultValue": "woffusigner"
+    },
+    "appfunName": {
+      "type": "string",
+      "defaultValue": "woffu-signer-azfun"
+    },
+    "applicationInsightsName": {
+      "type": "string",
+      "defaultValue": "woffu-signer-appi"
     }
-  },
-  "variables": {
-    "storageName": "woffusigner",
-    "appfunName": "woffu-signer-azfun",
-    "aiName": "woffu-signer-appi"
   },
   "resources": [
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2018-07-01",
-      "name": "[variables('storageName')]",
+      "name": "[parameters('storageName')]",
       "location": "[resourceGroup().location]",
       "sku": {
         "name": "Standard_LRS"
@@ -39,38 +46,38 @@
     },
     {
       "apiVersion": "2015-05-01",
-      "name": "[variables('aiName')]",
+      "name": "[parameters('aiName')]",
       "type": "Microsoft.Insights/components",
       "kind": "web",
       "location": "[resourceGroup().location]",
       "tags": {
-        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('appfunName'))]": "Resource"
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('appfunName'))]": "Resource"
       },
       "properties": {
         "Application_Type": "web",
-        "ApplicationId": "[variables('aiName')]"
+        "ApplicationId": "[parameters('aiName')]"
       }
     },
     {
       "apiVersion": "2015-08-01",
       "type": "Microsoft.Web/sites",
-      "name": "[variables('appfunName')]",
+      "name": "[parameters('appfunName')]",
       "location": "[resourceGroup().location]",
       "kind": "functionapp,linux",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]",
-        "[resourceId('Microsoft.Insights/components', variables('aiName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageName'))]",
+        "[resourceId('Microsoft.Insights/components', parameters('aiName'))]"
       ],
       "properties": {
         "siteConfig": {
           "appSettings": [
             {
               "name": "AzureWebJobsDashboard",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageName'), ';AccountKey=', listKeys(variables('storageName'),'2015-05-01-preview').key1)]"
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageName'), ';AccountKey=', listKeys(parameters('storageName'),'2015-05-01-preview').key1)]"
             },
             {
               "name": "AzureWebJobsStorage",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageName'), ';AccountKey=', listKeys(variables('storageName'),'2015-05-01-preview').key1)]"
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageName'), ';AccountKey=', listKeys(parameters('storageName'),'2015-05-01-preview').key1)]"
             },
             {
               "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -82,7 +89,7 @@
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-              "value": "[reference(resourceId('microsoft.insights/components/', variables('aiName')), '2015-05-01').InstrumentationKey]"
+              "value": "[reference(resourceId('microsoft.insights/components/', parameters('aiName')), '2015-05-01').InstrumentationKey]"
             },
             {
               "name": "WOFFU_URL",
