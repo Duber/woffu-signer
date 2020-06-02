@@ -6,6 +6,7 @@ Woffu Signer automatizes clocking in and out your workday in Woffu.
 ## Features
 - You can continue to check-in and out manually. It will only check you in or out if by the time specified in configuration you haven´t check-in/out already.
 - It won´t check you in on bank holidays or personal vacation as long as they are specified in Woffu.
+- Timezone configurable so it works all year round.
 
 ## Deploy
 [![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FDuber%2Fwoffu-signer%2Fmaster%2Fdeploy%2Fdeploy-to-azure.json)
@@ -19,6 +20,7 @@ Although deploy to azure is fully automated (both infrastructure and code), if y
 - **SignInSchedule**: Cron Expression when Sign in will be performed. See [link](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-expressions)
 - **SignOutSchedule**: Cron Expression when Sign out will be performed. See [link](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-expressions)
 - **WEBSITE_TIME_ZONE**: Timezone. Taken into account together with schedule expressions in order to fire signin/signout. See [link](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-vista/cc749073(v=ws.10))
+You can update settings in your FunctionApp at any time [link](https://docs.microsoft.com/en-us/azure/azure-functions/functions-how-to-use-azure-function-app-settings).
 
 
 ## Development
