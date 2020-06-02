@@ -1,6 +1,8 @@
 import axios from 'axios';
 import * as jwt from 'jsonwebtoken'
+import axiosRetry from 'axios-retry'
 
+axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay });
 const URL = process.env.WOFFU_URL
 let tokens = {}
 
