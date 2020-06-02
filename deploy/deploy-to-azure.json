@@ -107,6 +107,10 @@
             {
               "name": "WEBSITE_NODE_DEFAULT_VERSION",
               "value": "12.17.0"
+            },
+            {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "https://github.com/Duber/woffu-signer/releases/download/latest/woffu-signer-latest.zip"
             }
           ]
         },
