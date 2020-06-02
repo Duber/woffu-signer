@@ -5,7 +5,7 @@
     "WOFFU_URL": {
       "type": "string",
       "metadata": {
-        "description": "Your woffu url. ie: https://<your_company>.woffu.com"
+        "description": "Your woffu url. ie: https://your_company.woffu.com"
       },
       "defaultValue": "https://app.woffu.com"
     },
@@ -133,7 +133,7 @@
             },
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://github.com/Duber/woffu-signer/releases/download/latest/woffu-signer-latest.zip"
+              "value": "https://woffusigner.blob.core.windows.net/public-releases/woffu-signer-latest.zip"
             },
             {
               "name": "WEBSITE_TIME_ZONE",
