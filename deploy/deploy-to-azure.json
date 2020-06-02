@@ -4,6 +4,9 @@
   "parameters": {
     "WOFFU_URL": {
       "type": "string",
+      "metadata": {
+        "description": "Your woffu url. ie: https://<your_company>.woffu.com"
+      },
       "defaultValue": "https://app.woffu.com"
     },
     "WOFFU_USERNAME": {
@@ -14,11 +17,24 @@
     },
     "SignInSchedule": {
       "type": "string",
-      "defaultValue": "0 0 9 * * *"
+      "metadata": {
+        "description": "Cron Expression when Sign in will be performed. See https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-expressions."
+      },
+      "defaultValue": "0 0 9 * * 1-5"
     },
     "SignOutSchedule": {
       "type": "string",
-      "defaultValue": "0 0 18 * * *"
+      "metadata": {
+        "description": "Cron Expression when Sign out will be performed. See https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-expressions."
+      },
+      "defaultValue": "0 0 18 * * 1-5"
+    },
+    "WEBSITE_TIME_ZONE": {
+      "type": "string",
+      "metadata": {
+        "description": "Timezone. Taken into account together with schedule expressions in order to fire signin/signout. See https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-vista/cc749073(v=ws.10)?redirectedfrom=MSDN."
+      },
+      "defaultValue": "Romance Standard Time"
     },
     "storageName": {
       "type": "string",
@@ -118,6 +134,10 @@
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
               "value": "https://github.com/Duber/woffu-signer/releases/download/latest/woffu-signer-latest.zip"
+            },
+            {
+              "name": "WEBSITE_TIME_ZONE",
+              "value": "[parameters('WEBSITE_TIME_ZONE')]"
             }
           ]
         },
