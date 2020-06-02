@@ -46,7 +46,7 @@
     },
     {
       "apiVersion": "2015-05-01",
-      "name": "[parameters('aiName')]",
+      "name": "[parameters('applicationInsightsName')]",
       "type": "Microsoft.Insights/components",
       "kind": "web",
       "location": "[resourceGroup().location]",
@@ -55,7 +55,7 @@
       },
       "properties": {
         "Application_Type": "web",
-        "ApplicationId": "[parameters('aiName')]"
+        "ApplicationId": "[parameters('applicationInsightsName')]"
       }
     },
     {
@@ -66,7 +66,7 @@
       "kind": "functionapp,linux",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageName'))]",
-        "[resourceId('Microsoft.Insights/components', parameters('aiName'))]"
+        "[resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))]"
       ],
       "properties": {
         "siteConfig": {
@@ -89,7 +89,7 @@
             },
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-              "value": "[reference(resourceId('microsoft.insights/components/', parameters('aiName')), '2015-05-01').InstrumentationKey]"
+              "value": "[reference(resourceId('microsoft.insights/components/', parameters('applicationInsightsName')), '2015-05-01').InstrumentationKey]"
             },
             {
               "name": "WOFFU_URL",
