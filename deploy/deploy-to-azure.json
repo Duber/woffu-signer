@@ -7,19 +7,22 @@
       "metadata": {
         "description": "Your woffu url. ie: https://your_company.woffu.com"
       },
-      "defaultValue": "https://app.woffu.com"
+      "minLength": 1
     },
     "WOFFU_USERNAME": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "WOFFU_PASSWORD": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "SignInSchedule": {
       "type": "string",
       "metadata": {
         "description": "Cron Expression when Sign in will be performed. See https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-expressions."
       },
+      "minLength": 1,
       "defaultValue": "0 0 9 * * 1-5"
     },
     "SignOutSchedule": {
@@ -27,6 +30,7 @@
       "metadata": {
         "description": "Cron Expression when Sign out will be performed. See https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-expressions."
       },
+      "minLength": 1,
       "defaultValue": "0 0 18 * * 1-5"
     },
     "WEBSITE_TIME_ZONE": {
@@ -34,19 +38,23 @@
       "metadata": {
         "description": "Timezone. Taken into account together with schedule expressions in order to fire signin/signout. See https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-vista/cc749073(v=ws.10)."
       },
+      "minLength": 1,
       "defaultValue": "Romance Standard Time"
     },
     "storageName": {
       "type": "string",
-      "defaultValue": "woffusigner"
+      "minLength": 1,
+      "defaultValue": "[concat(' woffusigner',uniqueString(newGuid()))]"
     },
     "appfunName": {
       "type": "string",
-      "defaultValue": "woffu-signer-azfun"
+      "minLength": 1,
+      "defaultValue": "[concat('woffu-signer-azfun-',uniqueString(newGuid())]"
     },
     "applicationInsightsName": {
       "type": "string",
-      "defaultValue": "woffu-signer-appi"
+      "minLength": 1,
+      "defaultValue": "[concat('woffu-signer-appi-',uniqueString(newGuid())]"
     }
   },
   "resources": [
