@@ -46,6 +46,11 @@
       "minLength": 1,
       "defaultValue": "[concat(' woffusigner',uniqueString(newGuid()))]"
     },
+    "spName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat('woffu-signer-sp-',uniqueString(newGuid())]"
+    },
     "appfunName": {
       "type": "string",
       "minLength": 1,
@@ -83,16 +88,35 @@
       }
     },
     {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2016-09-01",
+      "name": "[parameters('spname')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "name": "[parameters('spname')]",
+        "computeMode": "Dynamic"
+      },
+      "sku": {
+        "name": "Y1",
+        "tier": "Dynamic",
+        "size": "Y1",
+        "family": "Y",
+        "capacity": 0
+      }
+    },
+    {
       "apiVersion": "2015-08-01",
       "type": "Microsoft.Web/sites",
       "name": "[parameters('appfunName')]",
       "location": "[resourceGroup().location]",
-      "kind": "functionapp,linux",
+      "kind": "functionapp",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageName'))]",
-        "[resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))]"
+        "[resourceId('Microsoft.Insights/components', parameters('applicationInsightsName'))]",
+        "[resourceId('Microsoft.Web/serverfarms', parameters('spName'))]"
       ],
       "properties": {
+        "serverFarmId": "[parameters('spName')]",
         "siteConfig": {
           "appSettings": [
             {
@@ -102,6 +126,14 @@
             {
               "name": "AzureWebJobsStorage",
               "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageName'), ';AccountKey=', listKeys(parameters('storageName'),'2015-05-01-preview').key1)]"
+            },
+            {
+              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageName'), ';AccountKey=', listKeys(parameters('storageName'),'2015-05-01-preview').key1)]"
+            },
+            {
+              "name": "WEBSITE_CONTENTSHARE",
+              "value": "[toLower(parameters('appfunName'))]"
             },
             {
               "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -148,9 +180,7 @@
               "value": "[parameters('WEBSITE_TIME_ZONE')]"
             }
           ]
-        },
-        "linuxFxVersion": "Node|12",
-        "reserved": true
+        }
       }
     }
   ],
