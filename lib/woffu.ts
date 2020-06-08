@@ -74,8 +74,9 @@ class Woffu {
     }
 
     private async isHoliday(token: string) {
-        let workday = await axios.get(`${URL}/api/users/${this.getUserIdFromToken(token)}/workdaylite`, this.buildAxiosOptionsWithToken(token))
-        return workday.status == 200 && (workday.data.IsWeekend || workday.data.IsHoliday)
+        let today = new Date().toISOString().substring(0, 10)
+        let response = await axios.get(`${URL}/api/users/${this.getUserIdFromToken(token)}/diaries/absence/single_events?fromDate=${today}&presence=false&toDate=${today}`, this.buildAxiosOptionsWithToken(token))
+        return response.status == 200 && response.data.Events.length > 0 && response.data.Events[0].isDisabled
     }
 
     private isValidToken(token: string) {
