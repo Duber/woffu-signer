@@ -29,10 +29,8 @@ jobs:
     - uses: montudor/action-zip@v0.1.0
       with:
         args: zip -qq -r ./drop/woffu-signer-latest.zip ./dist
-    - uses: bacongobbler/azure-blob-storage-upload@v1.1.0
+    - uses: lauchacarro/Azure-Storage-Action@v1.1
       with:
-        connection_string: ${{ secrets.PrereleaseStorageConnectionString }}
-        container_name: public-prereleases
-        source_dir: drop
-        extra_args: '--pattern woffu-signer-latest.zip'
-    
+        connection-string: ${{ secrets.PrereleaseStorageConnectionString }}
+        folder: drop
+        blob-container-name: public-prereleases
