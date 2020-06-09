@@ -23,6 +23,7 @@ jobs:
       with:
         node-version: 12.17.0        
     - run: npm install
+    - run: npm install -g azure-functions-core-tools@3
     - run: npm run build:production
     - uses: montudor/action-zip@v0.1.0
       with:
