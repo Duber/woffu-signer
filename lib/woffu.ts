@@ -20,6 +20,7 @@ class Woffu {
         if (response.status != 201) {
             throw new Error(`signin for user ${this.getUsernameFromToken(token)} failed with status ${response.status}`)
         }
+        console.log("Signed out.")
     }
     async signin(token: any) {
         let data = {
@@ -40,6 +41,7 @@ class Woffu {
         if (response.status != 201) {
             throw new Error(`signin for user ${this.getUsernameFromToken(token)} failed with status ${response.status}`)
         }
+        console.log("Signed in.")
     }
     async login(username: string, password: string) {
         try {
@@ -75,8 +77,16 @@ class Woffu {
 
     private async isHoliday(token: string) {
         let today = new Date().toISOString().substring(0, 10)
-        let response = await axios.get(`${URL}/api/users/${this.getUserIdFromToken(token)}/diaries/absence/single_events?fromDate=${today}&presence=false&toDate=${today}`, this.buildAxiosOptionsWithToken(token))
-        return response.status == 200 && response.data.Events.length > 0 && response.data.Events[0].isDisabled
+        let url = `${URL}/api/users/${this.getUserIdFromToken(token)}/diaries/absence/single_events?fromDate=${today}&presence=false&toDate=${today}`
+        let response = await axios.get(url, this.buildAxiosOptionsWithToken(token))
+        if (response.status != 200) {
+            throw new Error(`Error checking holidays. Url ${url} failed with status ${response.status}`)
+        }
+        if (response.data.Events.length > 0 && response.data.Events[0].isDisabled) {
+            console.log(`Holidays found: ${response.data.Events}`)
+            return true;
+        }
+        return false;
     }
 
     private isValidToken(token: string) {
