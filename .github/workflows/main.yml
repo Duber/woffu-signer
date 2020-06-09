@@ -19,8 +19,7 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v1.4.2
+    - uses: actions/setup-node@v1.4.2
       with:
         node-version: 12.17.0        
     - run: npm install
@@ -28,7 +27,6 @@ jobs:
     - uses: montudor/action-zip@v0.1.0
       with:
         args: zip -qq -r ./drop/woffu-signer-latest.zip ./dist
-    - name: Azure Blob Storage Upload
     - uses: bacongobbler/azure-blob-storage-upload@v1.1.0
       with:
         connection_string: ${{ secrets.PrereleaseStorageConnectionString }}
