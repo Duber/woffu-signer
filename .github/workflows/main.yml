@@ -32,7 +32,7 @@ jobs:
     - uses: fixpoint/azblob-upload-artifact@v3.3
       with:
         connection-string: ${{ secrets.PrereleaseStorageConnectionString }}
-        name: drop/woffu-signer-latest.zip
-        path: woffu-signer-latest.zip
+        name: woffu-signer-latest.zip
+        path: drop
         container: public-prereleases
         cleanup: yes
