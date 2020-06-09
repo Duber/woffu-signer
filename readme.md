@@ -30,6 +30,7 @@ You can update settings in your FunctionApp at any time [link](https://docs.micr
 
 ## Development
 0. Install Node version 12.17
+0. npm install -g azure-functions-core-tools@3
 0. npm install
 0. create a local.settings.json out of example.settings.json 
 0. install Azure functions extension in VsCode (optional)
