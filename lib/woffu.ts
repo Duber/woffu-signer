@@ -16,10 +16,7 @@ class Woffu {
             console.log(`Skipping signout because user ${this.getUsernameFromToken(token)} is not signed.`)
             return
         }
-        let response = await axios.post(`${URL}/api/signs`, data, this.buildAxiosOptionsWithToken(token))
-        if (response.status != 201) {
-            throw new Error(`signin for user ${this.getUsernameFromToken(token)} failed with status ${response.status}`)
-        }
+        await axios.post(`${URL}/api/signs`, data, this.buildAxiosOptionsWithToken(token))
         console.log("Signed out.")
     }
     async signin(token: any) {
@@ -33,14 +30,11 @@ class Woffu {
         }
 
         if (await this.isHoliday(token)) {
-            console.log(`Skipping signin for user ${this.getUsernameFromToken(token)} because today is weekend or holiday.`)
+            console.log(`Skipping signin for user ${this.getUsernameFromToken(token)} because today is a non-working day.`)
             return
         }
 
-        let response = await axios.post(`${URL}/api/signs`, data, this.buildAxiosOptionsWithToken(token))
-        if (response.status != 201) {
-            throw new Error(`signin for user ${this.getUsernameFromToken(token)} failed with status ${response.status}`)
-        }
+        await axios.post(`${URL}/api/signs`, data, this.buildAxiosOptionsWithToken(token))
         console.log("Signed in.")
     }
     async login(username: string, password: string) {
@@ -72,18 +66,16 @@ class Woffu {
 
     private async isCurrentlySigned(token: string) {
         let signs = await axios.get(`${URL}/api/signs`, this.buildAxiosOptionsWithToken(token))
-        return signs.status == 200 && signs.data.length > 0 && signs.data[signs.data.length - 1].SignIn
+        return signs.data.length > 0 && signs.data[signs.data.length - 1].SignIn
     }
 
     private async isHoliday(token: string) {
         let today = new Date().toISOString().substring(0, 10)
         let url = `${URL}/api/users/${this.getUserIdFromToken(token)}/diaries/absence/single_events?fromDate=${today}&presence=false&toDate=${today}`
         let response = await axios.get(url, this.buildAxiosOptionsWithToken(token))
-        if (response.status != 200) {
-            throw new Error(`Error checking holidays. Url ${url} failed with status ${response.status}`)
-        }
+
         if (response.data.Events.length > 0 && response.data.Events[0].isDisabled) {
-            console.log(`Holidays found: ${response.data.Events}`)
+            console.log(`Non-working day found: ${response.data.Events}`)
             return true;
         }
         return false;
