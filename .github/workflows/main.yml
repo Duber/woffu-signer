@@ -28,7 +28,7 @@ jobs:
     - run: mkdir drop
     - uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -qq -r -x ".*" -x "drop" ./drop/woffu-signer-latest.zip .
+        args: zip -qq -r ./drop/woffu-signer-latest.zip . -x ".*" -x "drop/" 
     - uses: fixpoint/azblob-upload-artifact@v3.3
       with:
         connection-string: ${{ secrets.PrereleaseStorageConnectionString }}
